@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  nextcloud:
+    image: nextcloud
+    ports:
+      - "8083:80"
+    volumes:
+      - nextcloud_data:/var/www/html
+    restart: always
+volumes:
+  nextcloud_data:
+  

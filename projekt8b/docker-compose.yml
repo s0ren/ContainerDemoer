@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  drone:
+    image: drone/drone:2
+    ports:
+      - "8086:80"
+    volumes:
+      - drone_data:/data
+    environment:
+      - DRONE_GITEA_SERVER=https://your-gitea.com
+      - DRONE_RPC_SECRET=supersecret
+      - DRONE_SERVER_HOST=localhost:8086
+      - DRONE_SERVER_PROTO=http
+volumes:
+  drone_data:

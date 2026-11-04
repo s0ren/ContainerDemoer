@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  reverse-proxy:
+    image: traefik:v2.9
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8088:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  my-app:
+    image: nginx
+    labels:
+      - "traefik.http.routers.myapp.rule=Host(myapp.localhost)"
+      - "traefik.http.services.myapp.loadbalancer.server.port=80"
+
+  

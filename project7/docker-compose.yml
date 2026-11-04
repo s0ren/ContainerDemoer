@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  plausible:
+    image: plausible/analytics
+    ports:
+      - "8084:8000"
+    depends_on:
+      - postgres
+      - clickhouse
+    environment:
+      - BASE_URL=http://localhost:8084
+      - SECRET_KEY=super_secret
+    volumes:
+      - plausible_data:/plausible
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=plausible_db
+      - POSTGRES_USER=plausible
+      - POSTGRES_PASSWORD=plausible
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  clickhouse:
+    image: clickhouse/clickhouse-server:22.6
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+volumes:
+  plausible_data:
+  postgres_data:
+  clickhouse_data:

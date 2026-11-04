@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  code-server:
+    image: codercom/code-server:latest
+    container_name: vscode
+    restart: always
+    environment:
+      - PASSWORD=secret123
+    volumes:
+      - ./projects:/home/coder/project
+    ports:
+      - "8443:8080"
