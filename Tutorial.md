@@ -165,15 +165,17 @@ A classic __Linux + Apache + MySQL + PHP (LAMP)__ stack using docker-compose. Yo
 
 This is where you stop thinking in containers and start thinking in __systems__.
 
-Skills you’ll learn:
+### Skills you’ll learn:
 - Using docker-compose.yml to manage multi-container setups
 - Persistent volumes for databases
 - Linking containers by service name
 - Environment variables for DB configs
 - Container networking
-Quick Setup
+
+### Quick Setup
 Create a project folder and add a docker-compose.yml like this:
 
+```yml
 version: '3.8'
 
 services:
@@ -199,8 +201,11 @@ services:
 
 volumes:
   db_data:
+```
+
 Create a basic index.php inside the web/ folder:
 
+```php
 <?php
 $mysqli = new mysqli("db", "user", "pass", "mydb");
 if ($mysqli->connect_error) {
@@ -208,33 +213,43 @@ if ($mysqli->connect_error) {
 } else {
   echo "Connected to MySQL!";
 }
+```
+
 Run it:
+```powershell
 docker-compose up -d
+```
 Visit http://localhost:8081. If it says “Connected to MySQL!” you nailed it.
 
-Why this project matters:
+### Why this project matters:
 Most tutorials ignore multi-container reality. But real web apps have:
 
-A backend
-A database
-Shared configs
-Persistent data
+- A backend
+- A database
+- Shared configs
+- Persistent data
+
 Using docker-compose like this teaches you how to think like a backend dev and ops engineer at the same time.
 
 You’ll break stuff, especially the DB. That’s part of the learning.
 
-Project 4: Run a WordPress blog in Docker (and customize it like a hacker)
-What you’re building:
+## Project 4: Run a WordPress blog in Docker (and customize it like a hacker)
+
+### What you’re building:
+
 A full-blown WordPress site, powered entirely by containers. You’ll spin up WordPress + MySQL, use volumes for data persistence, and actually mess with themes/plugins from your local machine.
 
 Yup Dockerized blogging, fully editable.
 
-Skills you’ll learn:
-Real-world multi-container orchestration
-Using depends_on and volumes for persistent app + DB state
-Customizing apps running inside containers
-Exposing ports and paths for CMS platforms
-Your docker-compose.yml:
+### Skills you’ll learn:
+
+- Real-world multi-container orchestration
+- Using depends_on and volumes for persistent app + - DB state
+- Customizing apps running inside containers
+- Exposing ports and paths for CMS platforms
+
+Your `docker-compose.yml`:
+```yaml
 version: '3.8'
 
 services:
@@ -264,41 +279,52 @@ services:
 volumes:
   wp_data:
   db_data:
+```
+
 Run it:
+```powershell
 docker-compose up -d
+```
+
 Then go to http://localhost:8082 and run through the classic WordPress setup wizard.
 
-Customizing themes/plugins:
-Your WordPress files are stored in the wp_data volume. Want to edit the theme?
+## Customizing themes/plugins:
+Your WordPress files are stored in the `wp_data` volume. Want to edit the theme?
 
-Stop the container.
-Mount a local folder into /var/www/html/wp-content/themes in docker-compose.yml.
-Edit files locally, refresh browser. Instant dev workflow.
+1. Stop the container.
+2. Mount a local folder into `/var/www/html/wp-content/themes` in `docker-compose.yml`.
+3. Edit files locally, refresh browser. Instant dev workflow.
+
 You can even copy your existing blog over or build a new theme if you’re feeling spicy.
 
-Why this project matters:
+### Why this project matters:
 WordPress isn’t just a blog it’s a real-world app with:
 
-DB connection requirement
-Volume persistence
-Plugin/theme customization
-Configs that break often
+- DB connection requirement
+- Volume persistence
+- Plugin/theme customization
+- Configs that break often
+
 This project shows you how Docker helps isolate the chaos — while still letting you hack, tweak, and experiment.
 
-Optional challenge: Try backing up your WordPress + DB data and restoring it on another machine. Real DevOps vibes.
+__Optional challenge__: Try backing up your WordPress + DB data and restoring it on another machine. _Real DevOps vibes_.
 
-Project 5: Self-host your own cloud IDE with code-server (VS Code in the browser, baby)
-What you’re building:
+## Project 5: Self-host your own cloud IDE with code-server (VS Code in the browser, baby)
+
+### What you’re building:
 Your very own VS Code in the browser, running inside a container. You’ll be able to code anywhere even from your iPad while keeping all your dev tools isolated.
 
 It’s like having a dev laptop… inside Docker.
 
-Skills you’ll learn:
+### Skills you’ll learn:
 Running third-party devtools in containers
 Port mapping and security considerations
 Using bind mounts to persist your code
 Environment management inside containers
+
 Using the official code-server image:
+
+```yaml
 version: '3.8'
 
 services:
@@ -312,41 +338,52 @@ services:
       - ./projects:/home/coder/project
     ports:
       - "8443:8080"
+```
+
 Create a projects folder in the same directory. That’s where all your files live and get edited inside the container.
 
 Run it:
+```powershell
 docker-compose up -d
+```
+
 Then open:
 http://localhost:8443
 
-Log in with the password secret123, and you’ve got full VS Code in the browser.
+Log in with the password `secret123`, and you’ve got full VS Code in the browser.
 
-Pro Tip:
-Mount your local ~/.ssh or Git credentials into the container if you want to commit code directly from code-server. But don’t do this on shared or exposed servers unless you lock things down properly.
+#### Pro Tip:
+Mount your local `~/.ssh` or Git credentials into the container if you want to commit code directly from code-server. But don’t do this on shared or exposed servers unless you lock things down properly.
 
-Why this project matters:
+### Why this project matters:
 This is where Docker stops being “just deployment stuff” and starts being your dev environment.
 
-You’ll learn:
+### You’ll learn:
 
-How to isolate tools
-How to persist data across restarts
-How to serve secure dev tools via the browser
+- How to isolate tools
+- How to persist data across restarts
+- How to serve secure dev tools via the browser
+
 And if you’ve ever wanted to code on a Chromebook, iPad, or PotatoPC™ this project makes it possible.
 
 
-Project 6: Make a personal file drop app (because you don’t need Big Cloud for everything)
-What you’re building:
+## Project 6: Make a personal file drop app (because you don’t need Big Cloud for everything)
+
+### What you’re building:
 A simple web-based app to upload, store, and download files self-hosted and containerized. You can use tools like nextcloud, minio, or even roll your own Flask upload tool.
 
 Great for sharing files across devices or with friends without third-party servers.
 
-Skills you’ll learn:
-Mounting volumes for persistent uploads
-Setting up secure upload endpoints
-Managing storage in containers
-Optional: adding reverse proxies for SSL and auth
-Option A: Run Nextcloud in Docker (the full suite)
+### Skills you’ll learn:
+- Mounting volumes for persistent uploads
+- Setting up secure upload endpoints
+- Managing storage in containers
+
+__Optional__: adding reverse proxies for SSL and auth
+
+### Option A: Run Nextcloud in Docker (the full suite)
+
+```yaml
 version: '3.8'
 
 services:
@@ -359,16 +396,21 @@ services:
     restart: always
 volumes:
   nextcloud_data:
-Then run:
+```
 
+Then run:
+```powershell
 docker-compose up -d
+```
+
 Visit http://localhost:8083, set your admin user, and boom — you’ve got Dropbox-level functionality.
 
-Option B: Make a mini file uploader with Flask
+### Option B: Make a mini file uploader with Flask
+
 If you want to go hacker-mode and build your own:
 
-Create app.py:
-
+Create `app.py`:
+```py
 from flask import Flask, request
 import os
 
@@ -380,41 +422,51 @@ def upload():
     file = request.files['file']
     file.save(os.path.join(UPLOAD_FOLDER, file.filename))
     return 'Uploaded!', 200
-And Dockerfile:
+```
 
+And Dockerfile:
+```Dockerfile
 FROM python:3.10-slim
 WORKDIR /app
 COPY app.py .
 RUN pip install flask
 EXPOSE 5000
 CMD ["python", "app.py"]
-Then:
+```
 
+Then:
+```powershell
 docker build -t file-drop .
 docker run -p 5000:5000 -v ${PWD}/uploads:/uploads file-drop
-Now curl -F 'file=@yourfile.txt' localhost:5000 works. You made a file drop from scratch!
+```
 
-Why this project matters:
+Now `curl -F 'file=@yourfile.txt' localhost:5000` works. You made a file drop from scratch!
+
+### Why this project matters:
 You’ll get your hands dirty with:
 
-File systems inside containers
-Upload logic and file permissions
-Persistent data across restarts
-Optional: adding authentication, HTTPS
+- File systems inside containers
+- Upload logic and file permissions
+- Persistent data across restarts
+
+__Optional__: adding authentication, HTTPS
 This project helps you bridge backend logic with DevOps concepts. It’s a practical exercise in “how would I host my own service?
 
-Project 7: Run your own web analytics with Plausible (because Google doesn’t need your data)
-What you’re building:
-A fully containerized privacy-friendly analytics dashboard using Plausible (or Umami). It tracks visitors to your websites without cookies, without creepy tracking, and without relying on Google.
+## Project 7: Run your own web analytics with Plausible (because Google doesn’t need your data)
+
+### What you’re building:
+A fully containerized privacy-friendly analytics dashboard using [Plausible](https://plausible.io/) (or [Umami](https://umami.is/)). It tracks visitors to your websites without cookies, without creepy tracking, and without relying on Google.
 
 Yes, you’ll finally know who’s visiting your portfolio without selling their souls.
 
-Skills you’ll learn:
-Running full-stack apps with Postgres
-Managing environment variables for app configs
-Using docker-compose for production apps
-Reverse proxying (optional) with Nginx or Traefik
+### Skills you’ll learn:
+- Running full-stack apps with Postgres
+- Managing environment variables for app configs
+- Using docker-compose for production apps
+- Reverse proxying (optional) with Nginx or Traefik
+
 Basic Plausible setup:
+```yml
 version: "3.3"
 
 services:
@@ -447,39 +499,48 @@ volumes:
   postgres_data:
   clickhouse_data:
 Run it:
+```
 
+```powershell
 docker-compose up -d
+```
+
 Then open:
 http://localhost:8084
 
-Set up your admin account and paste the <script> tag into your website.
+Set up your admin account and paste the `<script>` tag into your website.
 
-Want SSL and a domain?
-Add a reverse proxy container like Nginx Proxy Manager or Traefik to expose it securely via HTTPS and domain name.
+### Want SSL and a domain?
+Add a reverse proxy container like [Nginx Proxy Manager](https://nginxproxymanager.com/) or [Traefik](https://doc.traefik.io/traefik/) to expose it securely via HTTPS and domain name.
 
-Why this project matters:
+### Why this project matters:
 This setup teaches you to:
 
-Host full apps with databases and analytics logic
-Manage long-term data storage
-Run “production-like” tools without managed hosting
-Respect user privacy while still getting insight
-Bonus? You’ll never touch Google Analytics again. And clients love seeing a slick dashboard that doesn’t scream “Google owns your traffic.”
+- Host full apps with databases and analytics logic
+- Manage long-term data storage
+- Run “production-like” tools without managed hosting
+- Respect user privacy while still getting insight
 
-Project 8: Create a CI/CD pipeline with Jenkins or Drone (automate everything)
-What you’re building:
+__Bonus?__ You’ll never touch Google Analytics again. And clients love seeing a slick dashboard that doesn’t scream “Google owns your traffic.”
+
+## Project 8: Create a CI/CD pipeline with Jenkins or Drone (automate everything)
+
+### What you’re building:
+
 A fully Dockerized CI/CD pipeline using either Jenkins or Drone CI. You’ll trigger builds, run tests, and auto-deploy your apps — inside containers.
 
 This is where Docker becomes more than dev tools — it’s infrastructure.
 
-Skills you’ll learn:
-Containerizing build pipelines
-Mounting code volumes or Git repos
-Automating builds, tests, and deploys
-Managing secrets and credentials
-Option A: Jenkins in Docker
+### Skills you’ll learn:
+- Containerizing build pipelines
+- Mounting code volumes or Git repos
+- Automating builds, tests, and deploys
+- Managing secrets and credentials
+
+#### Option A: Jenkins in Docker
 Create docker-compose.yml:
 
+```yaml
 version: '3.8'
 
 services:
@@ -493,17 +554,22 @@ services:
     restart: always
 volumes:
   jenkins_home:
+```
+
 Start it:
-
+```ps
 docker-compose up -d
+```
+
 Go to http://localhost:8085, unlock it using the password from:
-
+```ps
 docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
-Install basic plugins and start creating pipelines. You can configure a GitHub webhook → Jenkins → Docker build + deploy flow.
+```
+Install basic plugins and start creating pipelines. You can configure a __GitHub webhook → Jenkins → Docker build + deploy__ flow.
 
-Option B: Drone CI (lightweight and modern)
+#### Option B: Drone CI (lightweight and modern)
 Drone is simpler and uses a .drone.yml file similar to GitHub Actions:
-
+```yml
 version: '3'
 
 services:
@@ -520,33 +586,38 @@ services:
       - DRONE_SERVER_PROTO=http
 volumes:
   drone_data:
+```
+
 Requires a Git repo integration like Gitea/GitHub + Drone plugin. But once set up, it’s so smooth.
 
-Why this project matters:
+### Why this project matters:
 You’re now building the kind of automation infrastructure used by real dev teams.
 
 You’ll understand:
 
-How build tools interact with source code
-Secrets management
-Running builds in isolation
-Triggering deploys from a Git push
+- How build tools interact with source code
+- Secrets management
+- Running builds in isolation
+- Triggering deploys from a Git push
+
 Whether you’re freelancing or scaling your startup, this one’s a game-changer.
 
-Project 9: Reverse proxy everything with Traefik or Nginx Proxy Manager (like a traffic ninja)
-What you’re building:
-A reverse proxy setup that routes traffic to your various containerized apps based on domain or subdomain. You’ll expose multiple services on a single server (or localhost), with optional SSL, basic auth, and load balancing.
+## Project 9: Reverse proxy everything with Traefik or Nginx Proxy Manager (like a traffic ninja)
+
+#### What you’re building:
+A __reverse proxy setup__ that routes traffic to your various containerized apps based on domain or subdomain. You’ll expose multiple services on a single server (or localhost), with optional SSL, basic auth, and load balancing.
 
 Basically: make your Docker world look professional.
 
-Skills you’ll learn:
-Configuring reverse proxies with Docker
-Using labels and automatic service discovery
-Generating SSL certs with Let’s Encrypt
-Managing multiple apps on a single port (via hostnames)
-Option A: Traefik + Docker labels
+### Skills you’ll learn:
+- Configuring reverse proxies with Docker
+- Using labels and automatic service discovery
+- Generating SSL certs with Let’s Encrypt
+- Managing multiple apps on a single port (via hostnames)
+- 
+#### Option A: Traefik + Docker labels
 Create a docker-compose.yml:
-
+```yml
 version: "3.8"
 
 services:
@@ -567,12 +638,14 @@ services:
     labels:
       - "traefik.http.routers.myapp.rule=Host(myapp.localhost)"
       - "traefik.http.services.myapp.loadbalancer.server.port=80"
+```
+
 Visit:
 http://myapp.localhost (after adding it to your /etc/hosts)
 
-Option B: Nginx Proxy Manager (GUI)
+#### Option B: Nginx Proxy Manager (GUI)
 Add this to docker-compose.yml:
-
+```yml
 version: '3.8'
 
 services:
@@ -588,41 +661,48 @@ services:
 volumes:
   npm_data:
   npm_letsencrypt:
-Run it and go to:
-http://localhost:81
+```
+
+Run it and go to: http://localhost:81
+
 Login (default: admin@example.com / changeme) and start adding domains + SSL with a few clicks.
 
-Why this project matters:
+### Why this project matters:
+
 Most real-world setups need some kind of proxy for:
 
-Clean URLs (myapp.com, not localhost:3000)
-SSL (Let’s Encrypt)
-Subdomains per service
-Security (basic auth, IP whitelisting)
+- Clean URLs (myapp.com, not localhost:3000)
+- SSL (Let’s Encrypt)
+- Subdomains per service
+- Security (basic auth, IP whitelisting)
+  
 This is your step into infra engineer territory routing, traffic management, and zero-downtime restarts.
 
 Okay. Let’s take it all home in the next one.
 
-Project 10: Build a mini SaaS stack with Node, MongoDB, and Nginx (your startup, containerized)
+## Project 10: Build a mini SaaS stack with Node, MongoDB, and Nginx (your startup, containerized)
 What you’re building:
-A fully containerized mini SaaS application — backend in Node.js, database in MongoDB, served to the world through Nginx.
+A fully containerized __mini SaaS application__ — backend in Node.js, database in MongoDB, served to the world through Nginx.
 
 You’ll mimic a real app setup with:
 
-API server
-Database
-Frontend (optional)
-Reverse proxy
-SSL-ready networking
+- API server
+- Database
+- Frontend (optional)
+- Reverse proxy
+- SSL-ready networking
+
 This is your Docker-powered MVP launchpad.
 
-Skills you’ll learn:
-Multi-tier architecture in Docker
-Managing environment variables
-Connecting app → DB → frontend
-Production-like configs with Nginx reverse proxy
-Network separation + naming conventions
+### Skills you’ll learn:
+- Multi-tier architecture in Docker
+- Managing environment variables
+- Connecting app → DB → frontend
+- Production-like configs with Nginx reverse proxy
+- Network separation + naming conventions
+- 
 Project structure:
+```
 /mini-saas
   /backend
     server.js
@@ -630,14 +710,20 @@ Project structure:
   /nginx
     default.conf
   docker-compose.yml
+```
+
 Sample backend/Dockerfile:
+```Dockerfile
 FROM node:18-alpine
 WORKDIR /app
 COPY . .
 RUN npm install
 EXPOSE 5000
 CMD ["node", "server.js"]
+```
+
 Sample server.js:
+```js
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -648,19 +734,24 @@ mongoose.connect("mongodb://mongo:27017/saas", {
 const app = express();
 app.get("/", (req, res) => res.send("SaaS Backend Running"));
 app.listen(5000, () => console.log("Server up on 5000"));
-Sample nginx/default.conf:
+```
+
+Sample `nginx/default.conf`:
+```conf
 nginx
 server {
-    listen 80;
+  listen 80;
 
-location / {
-        proxy_pass http://backend:5000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
+  location / {
+    proxy_pass http://backend:5000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
 }
+```
 
 Docker-compose.yml:
+```yml
 version: "3.8"
 
 services:
@@ -685,35 +776,44 @@ services:
       - backend
 volumes:
   mongo_data:
+```
+
 Run it:
+```ps
 docker-compose up --build
+```
+
 Then visit:
 http://localhost:8089
 
 You just simulated launching a micro-SaaS backend.
 
-Why this is your final Docker flex:
+### Why this is your final Docker flex:
+
 You’ve now built a:
 
-REST API
-Database backend
-Reverse proxy with Nginx
-Full networked architecture using Docker
+- REST API
+- Database backend
+- Reverse proxy with Nginx
+- Full networked architecture using Docker
+
 Want frontend too? Add another service with React or Vue, and proxy it through Nginx. You’ve got the skills now.
 
-Conclusion: You don’t need more tutorials you need projects that break you
+### Conclusion: You don’t need more tutorials you need projects that break you
 Let’s be real: most people know Docker like they know Git barely enough to not panic.
 
 But if you go through these 10 projects, you’ll:
 
-Stop guessing how volumes work
-Actually understand container networking
-Build real apps you can deploy tomorrow
-Think in systems, not commands
+- Stop guessing how volumes work
+- Actually understand container networking
+- Build real apps you can deploy tomorrow
+- Think in systems, not commands
+  
 These are the Docker reps that build DevOps muscle.
 
 Helpful Resources:
-Docker Docs
-Play with Docker
-Awesome Compose
-DigitalOcean Docker Tutorials
+- [Docker Docs](https://docs.docker.com/)
+- ~~[Play with Docker](https://labs.play-with-docker.com/)~~
+- [Awesome Compose](https://github.com/docker/awesome-compose)
+- [DigitalOcean Docker Tutorials](https://www.digitalocean.com/community/tags/docker)
+
